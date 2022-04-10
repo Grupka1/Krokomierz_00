@@ -1,0 +1,96 @@
+#include <Wire.h>
+#define Power_Register 0x2d
+#define X_Axis_register_DATAX0 0x32
+#define X_Axis_register_DATAX1 0x33
+#define Y_Axis_register_DATAY0 0x34
+#define Y_Axis_register_DATAY1 0x35
+#define Z_Axis_register_DATAZ0 0x36
+#define Z_Axis_register_DATAZ1 0x37
+int ADXAddress = 0x53;
+
+int X0, X1, X_out;
+int Y0, Y1, Y_out;
+int Z0, Z1, Z_out;
+float Xa, Ya, Za;
+int count =0;
+
+float distance;
+
+void setup() {
+Wire.begin();
+  Serial.begin(9600);
+  delay(100);
+  Wire.beginTransmission(ADXAddress);
+  Wire.write(Power_Register);
+
+  Wire.write(8);
+  Wire.endTransmission();
+
+
+
+}
+
+void loop() {
+Wire.beginTransmission(ADXAddress);
+  Wire.write(X_Axis_register_DATAX0);
+  Wire.write(X_Axis_register_DATAX1);
+  Wire.endTransmission();
+  Wire.requestFrom(ADXAddress, 2);
+  if(Wire.available()<=2); {
+    X0 = Wire.read();
+    X1 = Wire.read();
+    X1 = X1 <<8;
+    X_out = X0 + X1;
+    Xa = X_out/256.0;
+  }
+  
+  Wire.beginTransmission(ADXAddress);
+  Wire.write(Y_Axis_register_DATAY0);
+  Wire.write(Y_Axis_register_DATAY1);
+  Wire.endTransmission();
+  Wire.requestFrom(ADXAddress, 2);
+  if(Wire.available()<=2); {
+    Y0 = Wire.read();
+    Y1 = Wire.read();
+    Y1 = Y1 <<8;
+    Y_out = Y0 + Y1;
+    Ya = Y_out/256.0;
+  }
+  Wire.beginTransmission(ADXAddress);
+  Wire.write(Z_Axis_register_DATAZ0);
+  Wire.write(Z_Axis_register_DATAZ1);
+  Wire.endTransmission();
+  Wire.requestFrom(ADXAddress, 2);
+  if(Wire.available()<=2); {
+    Z0 = Wire.read();
+    Z1 = Wire.read();
+    Z1 = Z1 <<8;
+    Z_out = Z0 + Z1;
+    Za = Z_out/256.0;
+  }
+  
+if ( X_out <= 150 && Y_out>=120)
+{ count++;
+delay(200);
+}
+if ( X_out >= 160 && Y_out<=130)
+{
+count++;
+delay(200);
+}
+
+distance = count * 0.0006;
+Serial.print(X_out);
+Serial.print(",");
+delay(100);
+Serial.print(Y_out);
+Serial.print(",");
+delay(100);
+Serial.print(count);
+Serial.print(",");
+delay(100);
+Serial.print(distance);
+Serial.print(";");
+Serial.print("\n");
+delay(150); 
+}
