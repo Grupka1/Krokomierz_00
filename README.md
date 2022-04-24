@@ -2,6 +2,7 @@
 Projekt IPZ kompaktowego krokomierza który może być wszczepiny pod skórę
 
 Szacowana długość pracy:
+
 Mikrokontroler 2,5mA
 Akcelerometr 0,14mA
 Moduł BT 8mA (przy łączeniu ok 30mA)
