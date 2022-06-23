@@ -171,14 +171,14 @@ if (acc2-acc > 0.05)
     }
 
 Serial.print("steps: ");
-Serial.println(steps);
-Serial.print("Distance: ");
-Serial.print(steps*0.3048);
+Serial.println(steps*2);
+//Serial.print("Distance: ");
+//Serial.print(steps*0.3048);
 delay(400);
 }
 
 void adxl345_init(){
-Serial.begin(115200);
+Serial.begin(9600);
 Wire.begin();
 
 Wire.beginTransmission(0x53);
